@@ -18,15 +18,13 @@ struct Solver
 
 	void run()
 	{
-		solve(0,tracks[0]);
+		solve(0,0);
 	}
 	void check(const int& beg,const int& total)
 	{
 		if(total > max)
 		{
-			comb.push_back(tracks[beg]);
 			res = comb;
-			comb.pop_back();
 			max = total;
 		}
 
@@ -41,15 +39,11 @@ struct Solver
 
 		check(beg,total);
 		
-		if(beg == tracks.size() - 1)
-		{
-			
-			return;
-		}
+		
 		for(int i = beg; i < tracks.size();i++)
 		{
 			comb.push_back(tracks[i]);
-			solve(i+1, total + tracks[i+1]);
+			solve(i+1, total + tracks[i]);
 			comb.pop_back();
 		}
 		
@@ -83,6 +77,7 @@ int main()
 
 		Solver solv(N,tracks);
 		solv.run();
+
 		for(int& num : solv.res)
 		{
 			cout << num << " ";
