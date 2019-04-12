@@ -6,19 +6,19 @@ using namespace std;
 struct Solver
 {
 
-	vector<vector<char>> cblPath;
+	vector<string> cblPath;
 
 	int startColIndex;
 	const string IEHOVA = "IEHOVA#";
 
-	Solver(vector<vector<char>> aCblPath, int aStartColIndex)
+	Solver(vector<string> aCblPath, int aStartColIndex)
 	:cblPath(aCblPath), startColIndex(aStartColIndex)
 	{
 
 	}
 
 	void run()
-	{
+	{		
 		solve(0, cblPath.size() - 1, startColIndex);	
 	}
 	void solve(int cblStIndex,int i,int j)
@@ -30,7 +30,7 @@ struct Solver
 		}
 
 
-		if(j + 1 != cblPath.size() and cblPath[i][j + 1] == IEHOVA[cblStIndex])
+		if(j + 1 != cblPath[i].size() and cblPath[i][j + 1] == IEHOVA[cblStIndex])
 		{
 			cout << ((cblStIndex == 0) ? "right" : " right");
 			solve(cblStIndex + 1, i, j + 1);
@@ -59,26 +59,23 @@ int main()
 		int m;
 		cin >> m;
 		cin.ignore();
-		vector<vector<char>> cblPath(n,std::vector<char>(m));
+		vector<string> cblPath(n);
 
-		int startCol = 0;
+		
 
 		for(int i = 0;i < n;i++)
 		{
 
-			for(int j = 0; j < m;j++)
-			{
-				char c;
-				cin.get(c);
-				if(c == '@')
-					startCol = j;
+			string line;
+			getline(cin,line);
 			
-				cblPath[i][j] = c;
+		
+			cblPath.push_back(line);
 
-
-			}
-			cin.ignore();
+			
 		}
+		int l = cblPath.size() - 1;
+		int startCol = find(cblPath[l].begin(), cblPath[l].end(), '@') - cblPath[l].begin();
 		Solver solv(cblPath,startCol);
 		solv.run();
 
