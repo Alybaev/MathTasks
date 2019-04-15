@@ -4,16 +4,19 @@ using namespace std;
 
 struct Solver
 {
-    int min;
-    int steps;
     int n;
-    vector<int> rows;
-    vector<int> cols;
-    vector<int> diag1;
-    vector<int> diag2;
+
+    int steps;
+    int min;
     std::vector<int> initCols;
-    Solver(int aN,vector<int> aInitCols)
-    : n(aN), rows(n), cols(n), diag1(2 * n - 1), diag2(2 * n - 1), steps(0),min(8),initCols(aInitCols)
+
+    std::vector<int> rows;
+    std::vector<int> cols;
+    std::vector<int> diag1;
+    std::vector<int> diag2;
+
+    Solver(int aN,std::vector<int> aInitCols)
+    : steps(0),min(8),n(aN),rows(n),cols(n),diag1(n * 2 - 1),diag2(n * 2 - 1),initCols(aInitCols)
     {
         
     }
@@ -22,63 +25,58 @@ struct Solver
     {
         solve(0);
     }
-    
-    void solve(int c)
+    bool check(int row, int col)
     {
-        if (c == n)
+        return rows[row] == 0 and diag1[row + col] == 0 and diag2[n - 1 - row + col] == 0;
+    }
+
+    void putQueen(int row, int col)
+    {
+        rows[row] = diag1[row + col] = diag2[n - 1 - row + col] = 1;
+        cols[col] = row;
+    }
+
+    void takeQueen(int row, int col)
+    {
+        rows[row] = diag1[row + col] = diag2[n - 1 - row + col] = 0;
+   
+    }
+    void getMin()
+    {
+        for(int i = 0; i < cols.size();i++)
         {
-         
-            printSolution();
-        }
-        else
-        {
-            for (int i = 0; i < n; ++i)
+            if(cols[i] != initCols[i])
             {
-                if (check(i, c))
-                {
-                    putQueen(i, c);
-                    solve(c + 1);
-                    takeQueen(i, c);
-                }
-            }
-        }
-        
-    }
-    
-    bool check(int r, int c)
-    {
-        return rows[r] == 0 and diag1[r + c] == 0 and diag2[n - 1 - r + c] == 0;
-    }
-    
-    void putQueen(int r, int c)
-    {
-        cols[c] = r;
-        rows[r] = diag1[r + c] = diag2[n - 1 - r + c] = 1;
-    }
-    
-    void takeQueen(int r, int c)
-    {
-        rows[r] = diag1[r + c] = diag2[n - 1 - r + c] = 0;
-    }
-    
-    void printSolution()
-    {
-        
-        for (int i = 0;i < cols.size();i++)
-        {
-            if(initCols[i] != cols[i]){
                 ++steps;
             }
         }
         if(steps < min)
         {
-
             min = steps;
-        
         }
+
         steps = 0;
-        
     }
+    void solve(int c)
+    {
+        if(c == n)
+        {
+            getMin();
+            return;
+        }
+
+        for(int i = 0; i < 8;i++)
+        {
+            if(check(i,c))
+            {
+                putQueen(i,c);
+                solve(c + 1);
+                takeQueen(i,c);
+            }
+        }
+    }
+
+   
     
 };
 
