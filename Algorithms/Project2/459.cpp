@@ -4,22 +4,22 @@
 #include <map>
 using namespace std;
 
-using Graph = vector<vector<char>>;
+using Graph = vector<vector<int>>;
 
-void dfs(Graph& g,std::vector<bool>& visited, char u) 
+void dfs(Graph& g,std::vector<bool>& visited, int u) 
 {
-   visited[u - 'A'] = true;
+   visited[u] = true;
 
    for(int i = 0;i < g[u].size();i++)
    {
 
-        if(not visited[g[u][i] - 'A'])
+        if(not visited[g[u][i]])
         {
 
-            dfs(g,visited,g[u][i] );
+            dfs(g,visited, g[u][i]);
         }
    }
-}
+}   
 
 int main()
 {
@@ -33,15 +33,13 @@ int main()
         
          string line;
         if(t == 0)
-        {
-            getline(cin, line);
-        }
+            getline(cin,line);
         char largNode;
         cin >> largNode;
 
 
        
-        g(largNode - 'A' + 1);
+        Graph g(largNode - 'A' + 1);
       
         cin.ignore();
         while(getline(cin, line) and !line.empty())
@@ -52,16 +50,16 @@ int main()
 
         vector<bool> visited(largNode - 'A' + 1);
         int nComp = 0;
-        for(auto& p: g)
+        for(int i = 0; i < g.size();i++)
         {
-            if(not visited[p.first - 'A'])
+            if(not visited[i])
             {
                 ++nComp;
-                dfs(g,visited, p.first);
+                dfs(g,visited, i);
                 
             }
         }
-        cout <<nComp << "\n\n";
+        cout << nComp << ((t == n - 1) ? "\n" : "\n\n");
         
 
 
