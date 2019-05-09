@@ -6,15 +6,38 @@ using namespace std;
 struct Solver{
 
 
-	Solver(vector<vector<char>>& desk,)
+	
 
 	const vector<int> dr = {-1,-1,  0, 0, 1, 1};
 	const vector<int> dc = {-1, 0, -1, 1, 0, 1};
-	bool inRange(int i, int j, const int N)
+
+	vector<vector<char>> desk;
+	vector<vector<int>> visited;
+	bool is_white_win;
+	int N;
+
+	Solver(vector<vector<char>>& aDesk)
+	:desk(aDesk), is_white_win(false), N(aDesk.size()),visited(aDesk.size(), vector<int>(aDesk.size(), 0))
+	{
+
+	}
+
+	bool inRange(int i, int j)
 	{
 		return (i >= 0 and i < N) and (j >= 0 and j < N);
 	}
-	void dfs(const vector<vector<char>>& desk, bool& is_white_win, vector<vector<int>>& visited, int i,int j)
+	void run(int i, int j)
+	{
+		 
+
+		if(desk[i][j] == 'w' and not visited[i][j] )
+		{
+			
+			dfs( i, j);
+			
+		}
+	}
+	void dfs( int i,int j)
 	{
 		visited[i][j] = 1;
 		if(j == 0)
@@ -24,9 +47,9 @@ struct Solver{
 		{
 			int uI = i + dr[t];
 			int uJ = j + dc[t];
-			if(inRange(uI,uJ, desk.size()) and desk[uI][uJ] == 'w' and not visited[uI][uJ])
+			if(inRange(uI,uJ) and desk[uI][uJ] == 'w' and not visited[uI][uJ])
 			{
-				dfs(desk,is_white_win,visited, uI, uJ );
+				dfs( uI, uJ );
 			}
 		}
 	}
@@ -57,27 +80,18 @@ int main()
 				
 			}
 		}
-		bool is_white_win = false;
+		Solver solv(desk);
 		for(int i = 0; i < N;i++)
 		{
 			
-			for(int j = 0; j < N;j++)
+			for(int j = N - 1; j < N;j++)
 			{
-				vector<vector<int> > visited(N, std::vector<int>(N, 0));
-				if(j == N - 1 and desk[i][j] == 'w' and not visited[i][j] )
-				{
-					
-
-					
-					dfs(desk,is_white_win, visited, i, j);
-					
-					
-				}
 				
+				solv.run(i,j);
 			}
 			
 		}
-		cout << test << ((is_white_win) ? " W": " B") << "\n";
+		cout << test << ((solv.is_white_win) ? " W": " B") << "\n";
 		++test;
 	}
 	
