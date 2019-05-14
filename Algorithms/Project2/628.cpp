@@ -57,6 +57,8 @@ struct Solver
 
 int main()
 {
+	iostream::sync_with_stdio(false);
+	
 	int n;
 	while(cin >> n)
 	{
